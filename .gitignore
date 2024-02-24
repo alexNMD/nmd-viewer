@@ -1,0 +1,7 @@
+node_modules
+.cache
+.parcel-cache
+package-lock.json
+venv
+__pycache__
+projects
