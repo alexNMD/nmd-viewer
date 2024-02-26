@@ -24,12 +24,13 @@
 		<main>
 			<div class="frame">
 				<div class="frame__title"> 
-					<h1 class="frame__title-main">NMD — Images Viewer</h1> 
+					<a href="/" class="frame__title-main">NMD — Images Viewer</a> 
 				</div>
 				<a href="https://www.instagram.com/alexxnmd/" target="_blank" class="frame__back">Instagram</a>
 				<a href="https://www.linkedin.com/in/alexnmd/" target="_blank" class="frame__prev">Linkedin</a>
 				<nav class="frame__demos">
 					<span>Projects</span>
+					<br><br>
 					{% for project in projects %}
 						{% if project == project_selected %}
 							<a href="{{ project | lower }}" class="frame__demo frame__demo--current">{{ project }}</a>
@@ -45,9 +46,17 @@
 			</div>
 			<div class="slides">
 				{% for image in images_availables %}
-					<div class="slide">
-						<div class="slide__img" style="background-image:url('static/img/projects/{{ project_selected }}/{{ image }}')"></div>
-					</div>
+					{% if image.mobile_align %}
+						<div class="slide">
+							<div class="slide__img"
+								style="background-position: {{ image.mobile_align }} 50% !important; background-image:url('static/img/projects/{{ project_selected }}/{{ image.name }}')">
+							</div>
+						</div>
+					{% else %}
+						<div class="slide">
+							<div class="slide__img" style="background-image:url('static/img/projects/{{ project_selected }}/{{ image.name }}')"></div>
+						</div>
+					{% endif %}
 				{% endfor %}
 			</div>
 		</main>
