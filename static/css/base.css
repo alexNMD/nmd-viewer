@@ -164,7 +164,7 @@ body #cdawrap {
 
 .frame__demos {
 	grid-area: demos;
-	display: grid;
+	/* display: grid; */
 	grid-template-columns: repeat(8,auto);
 	column-gap: 1rem;
 	row-gap: 0.5rem;
