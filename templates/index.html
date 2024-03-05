@@ -49,12 +49,12 @@
 					{% if image.mobile_align %}
 						<div class="slide">
 							<div class="slide__img"
-								style="background-position: '{{ image.mobile_align }} 50% !important'; background-image:url('static/img/projects/{{ project_selected }}/{{ image.name }}')">
+								style='background-position: {{ image.mobile_align }} 50% !important; background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'>
 							</div>
 						</div>
 					{% else %}
 						<div class="slide">
-							<div class="slide__img" style="background-image:url('static/img/projects/{{ project_selected }}/{{ image.name }}')"></div>
+							<div class="slide__img" style='background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'></div>
 						</div>
 					{% endif %}
 				{% endfor %}
