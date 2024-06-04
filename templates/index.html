@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 	<head>
+		<!-- Google Search Console  -->
+		<meta name="google-site-verification" content="cjPYKLS9veZlumDHdPI6yDFQbtJOnkKImGbbODeVB4E" />
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-6N6H7X6PNT"></script>
 		<script>
@@ -39,10 +41,15 @@
 						{% endif %}
 					{% endfor %}
 				</nav>
-				<nav class="slides-nav">
-					<button class="slides-nav__item slides-nav__item--prev">&larr;</button>
-					<button class="slides-nav__item slides-nav__item--next">&rarr;</button>
-				</nav>
+				{% if images_availables | length > 1 %}
+					<nav class="slides-nav">
+						<button class="slides-nav__item slides-nav__item--prev">&larr;</button>
+						<button class="slides-nav__item slides-nav__item--next">&rarr;</button>
+					</nav>
+				{% endif %}
+			{% if not images_availables %}
+				<div>No picture available for this project</div>
+			{% endif %}
 			</div>
 			<div class="slides">
 				{% for image in images_availables %}

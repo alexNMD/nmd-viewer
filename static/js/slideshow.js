@@ -46,11 +46,13 @@ export class Slideshow {
 		this.DOM.slides = [...this.DOM.el.querySelectorAll('.slide')];
 		this.DOM.slidesInner = this.DOM.slides.map(item => item.querySelector('.slide__img'));
 		
-		// Set initial slide as current
-		this.DOM.slides[this.current].classList.add('slide--current');
-		
 		// Count total slides
 		this.slidesTotal = this.DOM.slides.length;
+
+		if (this.slidesTotal > 0) {
+		// Set initial slide as current
+			this.DOM.slides[this.current].classList.add('slide--current');
+		}
 	}
 
 	/**
@@ -74,11 +76,14 @@ export class Slideshow {
      * @param {number} direction - The direction to navigate. 1 for next and -1 for previous.
      * @returns {boolean} - Return false if the animation is currently running.
      */
-	navigate(direction) {  
+	navigate(direction) {
 		// Check if animation is already running
 		if ( this.isAnimating ) return false;
 		this.isAnimating = true;
-		
+
+		// Check if slideshow is empty
+		if ( this.slidesTotal < 1 ) return false;
+
 		// Update the current slide index based on direction
 		const previous = this.current;
 		this.current = direction === 1 ? 
