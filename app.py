@@ -1,7 +1,10 @@
 import os
 import re
 
-from flask import Flask, render_template, redirect, send_from_directory
+from datetime import datetime
+from urllib.parse import urlparse
+
+from flask import Flask, render_template, redirect, send_from_directory, request, make_response
 
 app = Flask(__name__)
 
@@ -22,11 +25,30 @@ def home(project=None):
     return render_template("index.html",
                            projects=projects_lst,
                            project_selected=project_selected,
-                           images_availables=images_lst_dct)
+                           images_availables=images_lst_dct
+            )
+
 
 @app.route('/images/<path:project>/<path:image>')
 def serve_project_image(project, image):
     return send_from_directory(f'{PROJECTS_PATH}/{project}', image), 200
+
+
+@app.route('/sitemap.xml')
+def sitemap():
+    host = urlparse(request.base_url).hostname
+    protocol = urlparse(request.base_url).scheme
+    projects_lst = [p.lower() for p in os.listdir(PROJECTS_PATH)] or []
+    xml_template =  render_template("sitemap.xml",
+                           dns=f"https://nmd.ddns.net",
+                           projects=projects_lst,
+                           lastmod=f"{datetime.today().strftime('%Y')}-01-01"
+            )
+
+    response = make_response(xml_template)
+    response.headers['Content-Type'] = 'application/xml; charset=utf-8'
+
+    return response
 
 @app.errorhandler(404)
 def page_not_found(e):
