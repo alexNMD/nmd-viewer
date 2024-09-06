@@ -28,8 +28,11 @@
 				<div class="frame__title"> 
 					<a href="/" class="frame__title-main">NMD — Images Viewer</a> 
 				</div>
-				<a href="https://www.instagram.com/alexxnmd/" target="_blank" class="frame__back">Instagram</a>
-				<a href="https://www.linkedin.com/in/alexnmd/" target="_blank" class="frame__prev">Linkedin</a>
+				<div class="frame__links">
+					<a href="{{ instagram_url }}" target="_blank">Instagram</a>
+					<a href="{{ linkedin_url }}" target="_blank">Linkedin</a>
+					<a href='{{ url_for("serve_project_document", document="Alexandre_NORMAND_2024.pdf") }}' target="_blank">Curriculum Vitae</a>
+				</div>
 				<nav class="frame__demos">
 					<span>Projects</span>
 					<br><br>
@@ -55,13 +58,19 @@
 				{% for image in images_availables %}
 					{% if image.mobile_align %}
 						<div class="slide">
-							<div class="slide__img"
-								style='background-position: {{ image.mobile_align }} 50% !important; background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'>
+							<div
+								class="slide__img"
+								style='background-position: {{ image.mobile_align }} 50% !important;
+										background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'
+							>
 							</div>
 						</div>
 					{% else %}
 						<div class="slide">
-							<div class="slide__img" style='background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'></div>
+							<div
+								class="slide__img"
+								style='background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'>
+							</div>
 						</div>
 					{% endif %}
 				{% endfor %}

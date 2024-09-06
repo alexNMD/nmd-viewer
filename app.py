@@ -6,9 +6,11 @@ from urllib.parse import urlparse
 
 from flask import Flask, render_template, redirect, send_from_directory, request, make_response
 
+import config
+
 app = Flask(__name__)
 
-PROJECTS_PATH = os.environ["PROJECTS_PATH"]
+PROJECTS_PATH = config.PROJECTS_PATH
 
 @app.route("/")
 @app.route("/<string:project>")
@@ -22,16 +24,23 @@ def home(project=None):
     rgx = '\$(.*?)\$' # regex searched
     images_lst_dct = [{ "name": f"{i}", "mobile_align": f"{re.search(rgx, i).group(1)}%" if re.search(rgx, i) else None } for i in images_lst]
 
-    return render_template("index.html",
-                           projects=projects_lst,
-                           project_selected=project_selected,
-                           images_availables=images_lst_dct
-            )
+    return render_template(
+        "index.html",
+        projects=projects_lst,
+        project_selected=project_selected,
+        images_availables=images_lst_dct,
+        instagram_url=config.INSTAGRAM_URL,
+        linkedin_url=config.LINKEDIN_URL
+    )
 
 
 @app.route('/images/<path:project>/<path:image>')
 def serve_project_image(project, image):
     return send_from_directory(f'{PROJECTS_PATH}/{project}', image), 200
+
+@app.route('/documents/<string:document>')
+def serve_project_document(document):
+    return send_from_directory(f'static/documents', document), 200
 
 
 @app.route('/sitemap.xml')
@@ -40,7 +49,7 @@ def sitemap():
     protocol = urlparse(request.base_url).scheme
     projects_lst = [p.lower() for p in os.listdir(PROJECTS_PATH)] or []
     xml_template =  render_template("sitemap.xml",
-                           dns=f"https://nmd.ddns.net",
+                           dns=config.DNS,
                            projects=projects_lst,
                            lastmod=f"{datetime.today().strftime('%Y')}-01-01"
             )
@@ -51,7 +60,7 @@ def sitemap():
     return response
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(error):
     return redirect('/'), 302
 
 if __name__ == "__main__":
