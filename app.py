@@ -38,6 +38,10 @@ def home(project=None):
 def serve_project_image(project, image):
     return send_from_directory(f'{PROJECTS_PATH}/{project}', image), 200
 
+@app.route('/documents/<string:document>')
+def serve_project_document(document):
+    return send_from_directory(f'static/documents', document), 200
+
 
 @app.route('/sitemap.xml')
 def sitemap():
