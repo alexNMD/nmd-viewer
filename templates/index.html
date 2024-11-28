@@ -55,32 +55,30 @@
 			</div>
 			<div class="slides">
 				{% for image in images_availables %}
-					{% if image.mobile_align %}
-						<div class="slide">
-							<div
-								class="slide__img"
-								style='background-position: {{ image.mobile_align }} 50% !important;
-										background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'
-							>
-							</div>
-						</div>
-					{% else %}
-						<div class="slide">
-							<div
-								class="slide__img"
-								style='background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'>
+					<div class="slide">
+						{% if image.mobile_align %}
+							<div class="slide__img" style='background-position: {{ image.mobile_align }} 50% !important;background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'>
+						{% else %}
+							<div class="slide__img" style='background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'>
+						{% endif %}
 								<div class="metadata">
-									<ul>
-										<li>Camera : {{ image.metadata.camera_model }}</li>
-										<li>Aperure (f-number) : {{ image.metadata.f_number }} </li>
-										<li>Exposure Time : {{ image.metadata.exposure_time }} </li>
-										<li>Focale : {{ image.metadata.focale }} </li>
-										<li>Date : {{ image.metadata.date }} </li>
-									</ul>
-								</div>
+										<ul>
+											<li>Camera : {{ image.metadata.camera_model }}</li>
+											<li>
+												Aperure :
+												{% if image.metadata.f_number != 'None' %} f/{{ image.metadata.f_number }} {% else %} N/A {% endif %}
+											</li>
+											<li>
+												Exposure Time :
+												{% if image.metadata.exposure_time != 'None' %} {{ image.metadata.exposure_time }} {% else %} N/A {% endif %}
+											</li>
+											<li>Focale : {{ image.metadata.focale }} </li>
+											<li>Date : {{ image.metadata.date }} </li>
+										</ul>
+									</div>
+							  </div>
 							</div>
-						</div>
-					{% endif %}
+					{% if image.mobile_align %} </div> {% endif %}
 				{% endfor %}
 			</div>
 		</main>

@@ -33,7 +33,6 @@ def home(project=None):
             metadata=get_exif_data(f'{project_path}/{i}')
         ) for i in images_lst
     ]
-    print(images_lst_dct)
 
     return render_template(
         "index.html",
