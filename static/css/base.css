@@ -118,7 +118,7 @@ a:focus-visible {
 	display: grid;
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto auto auto auto 1fr;
-	grid-template-areas: 'title title' 'prev back' 'demos demos' 'sponsor sponsor' 'nav nav';
+	grid-template-areas: 'title title' 'prev back' 'demos demos' 'metadata metadata' 'nav nav';
 	justify-content: start;
 	align-content: start;
 	align-items: start;
@@ -275,11 +275,21 @@ a.frame__demo--current {
 	gap: 0.5rem;
 	align-self: end;
 	align-items: center;
+	justify-self: end;
 }
 
-.slides-nav::before {
-	content: 'scroll / drag';
-	margin-right: 2rem;
+@media screen and (min-width: 53em) {
+    .slides-nav .navigate::before {
+        content: 'scroll';
+        margin-right: 2rem;
+    }
+}
+
+@media screen and (max-width: 53em) {
+    .slides-nav .navigate::before {
+        content: 'drag';
+        margin-right: 2rem;
+    }
 }
 
 .slides-nav__item {
@@ -311,7 +321,7 @@ a.frame__demo--current {
 		align-content: space-between;
 		grid-template-columns: auto auto auto 1fr;
 		grid-template-rows: auto auto;
-		grid-template-areas: 'title back prev demos' 'sponsor ... ... nav ';
+		grid-template-areas: 'title back prev demos' 'metadata ... ... nav ';
 	}
 	.frame__demos {
 		justify-self: end;
@@ -321,11 +331,26 @@ a.frame__demo--current {
 	a.frame__demo {
 		text-align: right;
 	}
-	.slides-nav {
-		justify-self: end;
-	}
 	body #cdawrap {
 		align-self: center;
 		justify-self: start;
 	}
+}
+
+.metadata {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 2rem;
+    font-size: 14px;
+    border-top-right-radius: 5px;
+}
+
+.metadata ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.metadata li {
+    margin-bottom: 5px; /* Espacement entre les éléments */
 }

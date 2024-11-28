@@ -44,15 +44,14 @@
 						{% endif %}
 					{% endfor %}
 				</nav>
-				{% if images_availables | length > 1 %}
-					<nav class="slides-nav">
-						<button class="slides-nav__item slides-nav__item--prev">&larr;</button>
-						<button class="slides-nav__item slides-nav__item--next">&rarr;</button>
-					</nav>
-				{% endif %}
-			{% if not images_availables %}
-				<div>No picture available for this project</div>
-			{% endif %}
+
+				<div class="slides-nav ">
+					{% if images_availables | length > 1 %}
+						<nav class="navigate"></nav>
+					{% else %}
+						<div>No picture available for this project</div>
+					{% endif %}
+				</div>
 			</div>
 			<div class="slides">
 				{% for image in images_availables %}
@@ -70,6 +69,15 @@
 							<div
 								class="slide__img"
 								style='background-image:url({{ url_for("serve_project_image", project=project_selected, image=image.name) }});'>
+								<div class="metadata">
+									<ul>
+										<li>Camera : {{ image.metadata.camera_model }}</li>
+										<li>Aperure (f-number) : {{ image.metadata.f_number }} </li>
+										<li>Exposure Time : {{ image.metadata.exposure_time }} </li>
+										<li>Focale : {{ image.metadata.focale }} </li>
+										<li>Date : {{ image.metadata.date }} </li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					{% endif %}
