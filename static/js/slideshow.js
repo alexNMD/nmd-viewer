@@ -113,46 +113,42 @@ export class Slideshow {
 			}
 		})
 		// Defining animation steps
-		.addLabel('start', 0)
-		.fromTo(upcomingSlide, {
-			autoAlpha: 1,
-			scale: 0.1,
-			xPercent: direction*100
-		}, {
-			duration: 0.7, 
-			ease: 'expo',
-			scale: 0.4,
-			xPercent: 0
-		}, 'start')
-		.fromTo(upcomingInner, {
-			filter: 'contrast(100%) saturate(100%)',
-			transformOrigin: '100% 50%',
-			scaleX: 4
-		}, {
-			duration: 0.7, 
-			ease: 'expo',
-			scaleX: 1
-		}, 'start')
-		.fromTo(currentInner, {
-			filter: 'contrast(100%) saturate(100%)'
-		}, {
-			duration: 0.7, 
-			ease: 'expo',
-			filter: 'contrast(120%) saturate(140%)'
-		}, 'start')
+        .addLabel('start', 0)
+        .fromTo(upcomingSlide, {
+            autoAlpha: 1,
+            scale: 0.1,
+            xPercent: direction * 100
+        }, {
+            duration: 0.7,
+            ease: 'expo',
+            scale: 0.4,
+            xPercent: 0
+        }, 'start')
+        .fromTo(upcomingInner, {
+            transformOrigin: '100% 50%',
+            scaleX: 4
+        }, {
+            duration: 0.7,
+            ease: 'expo',
+            scaleX: 1
+        }, 'start')
+        .fromTo(currentInner, {}, { // Supprimer l'effet "filter"
+            duration: 0.7,
+            ease: 'expo'
+        }, 'start')
 
-		.addLabel('middle', 'start+=0.6')
-		.to(upcomingSlide, {
-			duration: 1, 
-			ease: 'power4.inOut',
-			scale: 1
-		}, 'middle')
-		.to(currentSlide, {
-			duration: 1, 
-			ease: 'power4.inOut',
-			scale: 0.98,
-			autoAlpha: 0
-		}, 'middle')
+        .addLabel('middle', 'start+=0.6')
+        .to(upcomingSlide, {
+            duration: 1,
+            ease: 'power4.inOut',
+            scale: 1
+        }, 'middle')
+        .to(currentSlide, {
+            duration: 1,
+            ease: 'power4.inOut',
+            scale: 0.98,
+            autoAlpha: 0
+        }, 'middle')
 	}
 
 }
