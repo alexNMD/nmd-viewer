@@ -37,11 +37,12 @@
 					<span>Projects</span>
 					<br><br>
 					{% for project in projects %}
-						{% if project == project_selected %}
-							<a href="{{ project | lower }}" class="frame__demo frame__demo--current">{{ project }}</a>
-						{% else %}
-							<a href="{{ project | lower }}" class="frame__demo">{{ project }}</a>
-						{% endif %}
+						<a
+								href='{{ url_for("home", project=project) }}'
+								class="frame__demo {{'frame__demo--current' if project_selected == project else '' }}"
+						>
+							{{ project }}
+						</a>
 					{% endfor %}
 				</nav>
 
@@ -61,10 +62,10 @@
 									background-image: url({{ url_for('serve_project_image', project=project_selected, image=image.name) }});">
 							<div class="metadata">
 								<ul>
-									<li>Camera : {{ image.metadata.camera_model }}</li>
-									<li>Aperture : {{ 'f/' ~ image.metadata.f_number if image.metadata.f_number != 'None' else 'N/A' }}</li>
-									<li>Exposure Time : {{ image.metadata.exposure_time if image.metadata.exposure_time != 'None' else 'N/A' }}</li>
-									<li>Focale : {{ image.metadata.focale }}</li>
+									<li>Camera : {{ image.metadata.camera }}</li>
+									<li>Aperture : {{ image.metadata.aperture }}</li>
+									<li>Exposure Time : {{ image.metadata.exposure_time }}</li>
+									<li>Focal : {{ image.metadata.focal }}</li>
 									<li>Date : {{ image.metadata.date }}</li>
 								</ul>
 							</div>
