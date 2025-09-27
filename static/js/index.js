@@ -4,11 +4,9 @@ import { Slideshow } from './slideshow.js';
 const slides = document.querySelector('.slides');
 const slideshow = new Slideshow(slides);
 
-document.querySelector('.slides-nav__item--prev').addEventListener('click', () => slideshow.prev());
-document.querySelector('.slides-nav__item--next').addEventListener('click', () => slideshow.next());
 // Initialize the GSAP Observer plugin
 Observer.create({
-    type: 'wheel,touch,pointer',
+    type: 'wheel,touch,scroll,pointer',
     onDown: () => slideshow.prev(),
     onUp: () => slideshow.next(),
     // invert the mouse wheel delta

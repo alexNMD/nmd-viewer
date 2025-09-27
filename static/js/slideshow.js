@@ -46,11 +46,13 @@ export class Slideshow {
 		this.DOM.slides = [...this.DOM.el.querySelectorAll('.slide')];
 		this.DOM.slidesInner = this.DOM.slides.map(item => item.querySelector('.slide__img'));
 		
-		// Set initial slide as current
-		this.DOM.slides[this.current].classList.add('slide--current');
-		
 		// Count total slides
 		this.slidesTotal = this.DOM.slides.length;
+
+		if (this.slidesTotal > 0) {
+		// Set initial slide as current
+			this.DOM.slides[this.current].classList.add('slide--current');
+		}
 	}
 
 	/**
@@ -74,11 +76,14 @@ export class Slideshow {
      * @param {number} direction - The direction to navigate. 1 for next and -1 for previous.
      * @returns {boolean} - Return false if the animation is currently running.
      */
-	navigate(direction) {  
+	navigate(direction) {
 		// Check if animation is already running
 		if ( this.isAnimating ) return false;
 		this.isAnimating = true;
-		
+
+		// Check if slideshow is empty
+		if ( this.slidesTotal < 1 ) return false;
+
 		// Update the current slide index based on direction
 		const previous = this.current;
 		this.current = direction === 1 ? 
@@ -108,46 +113,42 @@ export class Slideshow {
 			}
 		})
 		// Defining animation steps
-		.addLabel('start', 0)
-		.fromTo(upcomingSlide, {
-			autoAlpha: 1,
-			scale: 0.1,
-			xPercent: direction*100
-		}, {
-			duration: 0.7, 
-			ease: 'expo',
-			scale: 0.4,
-			xPercent: 0
-		}, 'start')
-		.fromTo(upcomingInner, {
-			filter: 'contrast(100%) saturate(100%)',
-			transformOrigin: '100% 50%',
-			scaleX: 4
-		}, {
-			duration: 0.7, 
-			ease: 'expo',
-			scaleX: 1
-		}, 'start')
-		.fromTo(currentInner, {
-			filter: 'contrast(100%) saturate(100%)'
-		}, {
-			duration: 0.7, 
-			ease: 'expo',
-			filter: 'contrast(120%) saturate(140%)'
-		}, 'start')
+        .addLabel('start', 0)
+        .fromTo(upcomingSlide, {
+            autoAlpha: 1,
+            scale: 0.1,
+            xPercent: direction * 100
+        }, {
+            duration: 0.7,
+            ease: 'expo',
+            scale: 0.4,
+            xPercent: 0
+        }, 'start')
+        .fromTo(upcomingInner, {
+            transformOrigin: '100% 50%',
+            scaleX: 4
+        }, {
+            duration: 0.7,
+            ease: 'expo',
+            scaleX: 1
+        }, 'start')
+        .fromTo(currentInner, {}, { // Supprimer l'effet "filter"
+            duration: 0.7,
+            ease: 'expo'
+        }, 'start')
 
-		.addLabel('middle', 'start+=0.6')
-		.to(upcomingSlide, {
-			duration: 1, 
-			ease: 'power4.inOut',
-			scale: 1
-		}, 'middle')
-		.to(currentSlide, {
-			duration: 1, 
-			ease: 'power4.inOut',
-			scale: 0.98,
-			autoAlpha: 0
-		}, 'middle')
+        .addLabel('middle', 'start+=0.6')
+        .to(upcomingSlide, {
+            duration: 1,
+            ease: 'power4.inOut',
+            scale: 1
+        }, 'middle')
+        .to(currentSlide, {
+            duration: 1,
+            ease: 'power4.inOut',
+            scale: 0.98,
+            autoAlpha: 0
+        }, 'middle')
 	}
 
 }
