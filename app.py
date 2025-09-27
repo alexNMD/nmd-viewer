@@ -1,5 +1,6 @@
 import os
 import re
+import platform
 
 from datetime import datetime
 # from urllib.parse import urlparse
@@ -11,7 +12,7 @@ from utils import get_exif_data
 
 app = Flask(__name__)
 
-PROJECTS_PATH = config.PROJECTS_PATH
+PROJECTS_PATH = config.PROJECTS_PATH_WIN if platform.system() == 'Windows' else config.PROJECTS_PATH
 
 
 @app.route("/")
@@ -41,6 +42,7 @@ def home(project=None):
         images_availables=images_lst_dct,
         instagram_url=config.INSTAGRAM_URL,
         linkedin_url=config.LINKEDIN_URL,
+        cv_filename=config.CV_FILENAME,
     )
 
 
