@@ -51,18 +51,19 @@ class MetadataDTO:
 
 
 def get_exif_data(image_path):
-    raw_data = {}
+    raw_data = dict()
 
-    with (open(image_path, 'rb') as image_file):
-        tags = exifread.process_file(image_file)
-        for tag_name, tag_value in tags.items():
-            if tag_name not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename'):
-                if isinstance(tag_value, exifread.classes.IfdTag):
-                    raw_data[tag_name] = tag_value.printable
-        metadata = MetadataDTO(raw_data)
+    try:
+        with (open(image_path, 'rb') as image_file):
+            tags = exifread.process_file(image_file)
+            for tag_name, tag_value in tags.items():
+                if tag_name not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename'):
+                    if isinstance(tag_value, exifread.classes.IfdTag):
+                        raw_data[tag_name] = tag_value.printable
+    except exifread.heic.NoParser:
+        pass
 
-
-        return metadata
+    return MetadataDTO(raw_data)
 
 
 if __name__ == '__main__':
