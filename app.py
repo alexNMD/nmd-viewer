@@ -42,6 +42,7 @@ def home(project=None):
         images_availables=images_lst_dct,
         instagram_url=config.INSTAGRAM_URL,
         linkedin_url=config.LINKEDIN_URL,
+        cv_filename=config.CV_FILENAME,
     )
 
 
