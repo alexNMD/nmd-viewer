@@ -1,6 +1,6 @@
 DNS = "https://nmd.ddns.net"
 INSTAGRAM_URL = "https://www.instagram.com/alexxnmd/"
-LINKEDIN_URL = "https://www.linkedin.com/in/alexnmd/"
+GITHUB_URL = "https://github.com/alexNMD"
 PROJECTS_PATH = "/media/Armoire/projects_viewer"
 PROJECTS_PATH_WIN = "Z:\projects_viewer"
 CV_FILENAME="CV_Alexandre_Normand_2025.pdf"
