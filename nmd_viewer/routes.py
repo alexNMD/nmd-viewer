@@ -3,7 +3,7 @@ import re
 
 from datetime import datetime
 
-from flask import current_app, render_template, redirect, send_from_directory, make_response, Blueprint
+from flask import render_template, redirect, send_from_directory, make_response, Blueprint
 
 import config
 from utils import get_exif_data
