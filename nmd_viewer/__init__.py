@@ -1,6 +1,6 @@
 from flask import Flask
 
-from .routes import bp
+from nmd_viewer.routes import bp
 
 app = Flask(__name__)
 app.register_blueprint(bp)

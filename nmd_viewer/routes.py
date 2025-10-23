@@ -5,8 +5,8 @@ from datetime import datetime
 
 from flask import render_template, redirect, send_from_directory, make_response, Blueprint
 
-import config
-from utils import get_exif_data
+from nmd_viewer.utils import get_exif_data
+from nmd_viewer import config
 
 bp = Blueprint("main", __name__)
 
