@@ -6,6 +6,6 @@ services:
     environment:
       - CV_FILENAME="CV_Alexandre_Normand_2025.pdf"
     volumes:
-      - /media/Armoire/projects_viewer:/app/nmd-project
+      - /media/Armoire/projects_viewer:/app/nmd_project
     container_name: nmd_viewer
     restart: unless-stopped

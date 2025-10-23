@@ -8,5 +8,5 @@ DNS = "https://nmd.ddns.net"
 INSTAGRAM_URL = "https://www.instagram.com/alexxnmd/"
 GITHUB_URL = "https://github.com/alexNMD"
 
-PROJECTS_PATH = "/app/nmd-project"
+PROJECTS_PATH = "/app/nmd_project"
 CV_FILENAME = os.getenv("CV_FILENAME")
