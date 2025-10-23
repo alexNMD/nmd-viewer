@@ -31,14 +31,14 @@
 				<div class="frame__links">
 					<a href="{{ instagram_url }}" target="_blank">Instagram</a>
 					<a href="{{ github_url }}" target="_blank">Github</a>
-					<a href='{{ url_for("serve_project_document", document="{{ cv_filename }}") }}' target="_blank">Curriculum Vitae</a>
+					<a href='{{ url_for("main.serve_project_document", document="{{ cv_filename }}") }}' target="_blank">Curriculum Vitae</a>
 				</div>
 				<nav class="frame__demos">
 					<span>Projects</span>
 					<br><br>
 					{% for project in projects %}
 						<a
-								href='{{ url_for("home", project=project) }}'
+								href='{{ url_for("main.home", project=project) }}'
 								class="frame__demo {{'frame__demo--current' if project_selected == project else '' }}"
 						>
 							{{ project }}
@@ -59,7 +59,7 @@
 					<div class="slide">
 						<div class="slide__img"
 							 style="background-position: {{ image.mobile_align if image.mobile_align else 'center' }} 50% !important;
-									background-image: url({{ url_for('serve_project_image', project=project_selected, image=image.name) }});">
+									background-image: url({{ url_for('main.serve_project_image', project=project_selected, image=image.name) }});">
 							<div class="metadata">
 								<ul>
 									<li>Camera : {{ image.metadata.camera }}</li>
