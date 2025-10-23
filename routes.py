@@ -1,27 +1,22 @@
 import os
 import re
-import platform
 
 from datetime import datetime
-# from urllib.parse import urlparse
 
-from flask import Flask, render_template, redirect, send_from_directory, request, make_response
+from flask import current_app, render_template, redirect, send_from_directory, make_response, Blueprint
 
 import config
 from utils import get_exif_data
 
-app = Flask(__name__)
+bp = Blueprint("main", __name__)
 
-PROJECTS_PATH = config.PROJECTS_PATH_WIN if platform.system() == 'Windows' else config.PROJECTS_PATH
-
-
-@app.route("/")
-@app.route("/<string:project>")
+@bp.route("/")
+@bp.route("/<string:project>")
 def home(project=None):
     project = project.lower() if project else ""
-    projects_lst = [p.lower() for p in os.listdir(PROJECTS_PATH)] or []
+    projects_lst = [p.lower() for p in os.listdir(config.PROJECTS_PATH)] or []
     project_selected = project if project in projects_lst else projects_lst[0]
-    project_path = f"{PROJECTS_PATH}/{project_selected}"
+    project_path = f"{config.PROJECTS_PATH}/{project_selected}"
 
     images_lst = os.listdir(project_path) or []
 
@@ -46,21 +41,21 @@ def home(project=None):
     )
 
 
-@app.route('/images/<path:project>/<path:image>')
+@bp.route('/images/<path:project>/<path:image>')
 def serve_project_image(project, image):
-    return send_from_directory(f'{PROJECTS_PATH}/{project}', image), 200
+    return send_from_directory(f'{config.PROJECTS_PATH}/{project}', image), 200
 
 
-@app.route('/documents/<string:document>')
+@bp.route('/documents/<string:document>')
 def serve_project_document(document):
-    return send_from_directory(f'static/documents', document), 200
+    return send_from_directory(f'{config.PROJECTS_PATH}/documents', document), 200
 
 
-@app.route('/sitemap.xml')
+@bp.route('/sitemap.xml')
 def sitemap():
     # host = urlparse(request.base_url).hostname
     # protocol = urlparse(request.base_url).scheme
-    projects_lst = [p.lower() for p in os.listdir(PROJECTS_PATH)] or []
+    projects_lst = [p.lower() for p in os.listdir(config.PROJECTS_PATH)] or []
     xml_template = render_template("sitemap.xml",
                                    dns=config.DNS,
                                    projects=projects_lst,
@@ -68,16 +63,11 @@ def sitemap():
                                    )
 
     response = make_response(xml_template)
-    response.headers['Content-Type'] = 'application/xml; charset=utf-8'
+    response.headers['Content-Type'] = 'current_application/xml; charset=utf-8'
 
     return response
 
 
-@app.errorhandler(404)
+@bp.errorhandler(404)
 def page_not_found(error):
     return redirect('/'), 302
-
-
-if __name__ == "__main__":
-    # run app in debug mode on port 5000
-    app.run(debug=True, port=5000, host='0.0.0.0')

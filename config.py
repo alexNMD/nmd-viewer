@@ -1,6 +1,12 @@
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 DNS = "https://nmd.ddns.net"
 INSTAGRAM_URL = "https://www.instagram.com/alexxnmd/"
 GITHUB_URL = "https://github.com/alexNMD"
-PROJECTS_PATH = "/media/Armoire/projects_viewer"
-PROJECTS_PATH_WIN = "Z:\projects_viewer"
-CV_FILENAME="CV_Alexandre_Normand_2025.pdf"
+
+PROJECTS_PATH = "/app/nmd-project"
+CV_FILENAME = os.getenv("CV_FILENAME")

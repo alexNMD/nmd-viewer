@@ -4,10 +4,8 @@ services:
     ports:
       - 8080:8080
     environment:
-      - PROJECTS_PATH=/media/Armoire/projects_viewer
-      - APP_ENV=prod
+      - CV_FILENAME="CV_Alexandre_Normand_2025.pdf"
     volumes:
-      - /application/nmd-viewer:/nmd-viewer
-      - /media/Armoire/projects_viewer:/media/Armoire/projects_viewer
+      - /media/Armoire/projects_viewer:/app/nmd-project
     container_name: nmd_viewer
     restart: unless-stopped
