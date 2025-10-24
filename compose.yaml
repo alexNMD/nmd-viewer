@@ -2,10 +2,11 @@ services:
   nmd_viewer:
     image: ghcr.io/alexnmd/nmd_viewer:latest
     ports:
-      - 8080:8080
+      - "8080:8080"
     environment:
-      - CV_FILENAME="CV_Alexandre_Normand_2025.pdf"
+      - CV_FILENAME=CV_Alexandre_Normand_2025.pdf
     volumes:
       - /media/Armoire/projects_viewer:/app/nmd_project
+      - ./documents:/app/documents
     container_name: nmd_viewer
     restart: unless-stopped

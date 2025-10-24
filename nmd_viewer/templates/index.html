@@ -29,9 +29,9 @@
 					<a href="/" class="frame__title-main">NMD — Images Viewer</a>
 				</div>
 				<div class="frame__links">
-					<a href="{{ instagram_url }}" target="_blank">Instagram</a>
-					<a href="{{ github_url }}" target="_blank">Github</a>
-					<a href='{{ url_for("main.serve_project_document", document="{{ cv_filename }}") }}' target="_blank">Curriculum Vitae</a>
+					<a href="{{ config.INSTAGRAM_URL }}" target="_blank">Instagram</a>
+					<a href="{{ config.GITHUB_URL }}" target="_blank">Github</a>
+					<a href="{{ url_for('main.serve_project_document', document=config.CV_FILENAME) }}" target="_blank">Curriculum Vitae</a>
 				</div>
 				<nav class="frame__demos">
 					<span>Projects</span>

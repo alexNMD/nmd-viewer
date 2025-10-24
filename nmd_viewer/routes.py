@@ -35,9 +35,7 @@ def home(project=None):
         projects=projects_lst,
         project_selected=project_selected,
         images_availables=images_lst_dct,
-        instagram_url=config.INSTAGRAM_URL,
-        github_url=config.GITHUB_URL,
-        cv_filename=config.CV_FILENAME,
+        config=config,
     )
 
 
@@ -48,7 +46,7 @@ def serve_project_image(project, image):
 
 @bp.route('/documents/<string:document>')
 def serve_project_document(document):
-    return send_from_directory(f'{config.PROJECTS_PATH}/documents', document), 200
+    return send_from_directory(config.DOCUMENTS_PATH, document), 200
 
 
 @bp.route('/sitemap.xml')
