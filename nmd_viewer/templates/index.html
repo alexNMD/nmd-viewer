@@ -27,6 +27,9 @@
 			<div class="frame">
 				<div class="frame__title"> 
 					<a href="/" class="frame__title-main">NMD — Images Viewer</a>
+					<a href="/about" class="frame__demo {{'frame__demo--current' if project_selected == 'about' }}">
+						about
+					</a>
 				</div>
 				<div class="frame__links">
 					<a href="{{ config.INSTAGRAM_URL }}" target="_blank">Instagram</a>
@@ -47,7 +50,17 @@
 				</nav>
 
 				<div class="slides-nav ">
-					{% if images_availables | length > 1 %}
+					{% if request.endpoint == 'main.about' %}
+						<div>
+							Hello, it's Alexandre.
+							<br>
+							I'm a French developer with a taste for minimalist design (this website, for instance).
+							<br>
+							I'm also a photographer at heart, capturing moments purely for the joy of it.
+							<br>
+							Most of my travels happen on two wheels — by bike, of course.
+						</div>
+					{% elif images_availables | length > 1 %}
 						<nav class="navigate"></nav>
 					{% else %}
 						<div>No picture available for this project</div>

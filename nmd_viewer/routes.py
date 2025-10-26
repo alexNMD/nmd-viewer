@@ -1,41 +1,32 @@
-import os
-import re
-
 from datetime import datetime
 
 from flask import render_template, redirect, send_from_directory, make_response, Blueprint
 
-from nmd_viewer.utils import get_exif_data
 from nmd_viewer import config
+from nmd_viewer import utils
 
 bp = Blueprint("main", __name__)
+
+@bp.route("/about")
+def about():
+    return render_template(
+        "index.html",
+        project_selected="about",
+        images_availables=[],
+        **utils.get_template_context()
+    )
 
 @bp.route("/")
 @bp.route("/<string:project>")
 def home(project=None):
-    project = project.lower() if project else ""
-    projects_lst = [p.lower() for p in os.listdir(config.PROJECTS_PATH)] or []
-    project_selected = project if project in projects_lst else projects_lst[0]
-    project_path = f"{config.PROJECTS_PATH}/{project_selected}"
-
-    images_lst = os.listdir(project_path) or []
-
-    rgx = '\$(.*?)\$'  # regex searched
-
-    images_lst_dct = [
-        dict(
-            name=f"{i}",
-            mobile_align=f"{re.search(rgx, i).group(1)}%" if re.search(rgx, i) else None,
-            metadata=get_exif_data(f'{project_path}/{i}')
-        ) for i in images_lst
-    ]
+    default_project = utils.get_projects()[0] if utils.get_projects() else None
+    project_selected = project or default_project
 
     return render_template(
         "index.html",
-        projects=projects_lst,
         project_selected=project_selected,
-        images_availables=images_lst_dct,
-        config=config,
+        images_availables=utils.get_images_metadata(project_selected=project_selected),
+        **utils.get_template_context()
     )
 
 
@@ -51,14 +42,10 @@ def serve_project_document(document):
 
 @bp.route('/sitemap.xml')
 def sitemap():
-    # host = urlparse(request.base_url).hostname
-    # protocol = urlparse(request.base_url).scheme
-    projects_lst = [p.lower() for p in os.listdir(config.PROJECTS_PATH)] or []
     xml_template = render_template("sitemap.xml",
                                    dns=config.DNS,
-                                   projects=projects_lst,
-                                   lastmod=f"{datetime.today().strftime('%Y')}-01-01"
-                                   )
+                                   lastmod=f"{datetime.today().strftime('%Y')}-01-01",
+                                   **utils.get_template_context())
 
     response = make_response(xml_template)
     response.headers['Content-Type'] = 'current_application/xml; charset=utf-8'
