@@ -2,40 +2,54 @@ import re
 import os
 from datetime import datetime
 
-import exifread
+from PIL import Image
+import piexif
 
 from nmd_viewer import config
 
-DEFAULT_VALUE = 'N/A'
+from fractions import Fraction
+
 
 class MetadataDTO:
+    DEFAULT_VALUE = 'N/A'
 
     def __init__(self, entity: dict):
-        self.focal = self.get_focal(entity.get('EXIF FocalLength'))
-        self.aperture = self.get_aperture(entity.get('EXIF FNumber'))
-        self.exposure_time = self.get_exposure_time(entity.get('EXIF ExposureTime'))
-        self.iso = entity.get('EXIF ISOSpeedRatings', DEFAULT_VALUE)
-        self.artist = entity.get('Image Artist', DEFAULT_VALUE)
-        self.camera_name = entity.get('Image Make', 'Analog')
-        self.camera_model = entity.get('Image Model', '')
-        self.camera = self.camera_name + ' ' + self.camera_model
-        self.date = self.get_date(entity.get('EXIF DateTimeOriginal'))
+        self.focal = self.get_focal(entity.get('EXIF_FocalLength'))
+        self.aperture = self.get_aperture(entity.get('EXIF_FNumber'))
+        self.exposure_time = self.get_exposure_time(entity.get('EXIF_ExposureTime'))
+        self.iso = entity.get('EXIF_ISOSpeedRatings', self.DEFAULT_VALUE)
+        self.artist = entity.get('EXIF_Artist', self.DEFAULT_VALUE)
+        self.camera_name = entity.get('EXIF_Make', 'Analog')
+        self.camera_model = entity.get('EXIF_Model', '')
+        self.camera = " ".join([self.camera_name, self.camera_model])
+        self.date = self.get_date(entity.get('EXIF_DateTimeOriginal', ''))
 
     @classmethod
     def get_focal(cls, focal):
-        return f"{focal} mm" if focal else DEFAULT_VALUE
+            return f"{round(cls._divide_numbers(focal))} mm" if focal else cls.DEFAULT_VALUE
 
     @classmethod
     def get_aperture(cls, aperture):
-        return f"f/{cls._divide_f_number(aperture)}" if aperture else DEFAULT_VALUE
+        return f"f/{cls._divide_numbers(aperture)}" if aperture else cls.DEFAULT_VALUE
 
     @classmethod
-    def get_exposure_time(cls, exposure_time):
-        _second_sign = '"'
-        if exposure_time:
-            return exposure_time if "/" in exposure_time else f"{exposure_time}{_second_sign}"
+    def get_exposure_time(cls, value):
+        if isinstance(value, tuple) and len(value) == 2:
+            exposure = cls._divide_numbers(value)
+        elif isinstance(value, Fraction):
+            exposure = float(value)
+        elif isinstance(value, (int, float)):
+            exposure = float(value)
         else:
-            return DEFAULT_VALUE
+            try:
+                exposure = float(Fraction(value.decode() if isinstance(value, bytes) else value))
+            except Exception:
+                return str(value)
+
+        if exposure < 1:
+            return f"1/{int(round(1 / exposure))} s"
+        else:
+            return f"{round(exposure, 2)} s"
 
     @classmethod
     def get_date(cls, date):
@@ -43,31 +57,58 @@ class MetadataDTO:
             date_obj = datetime.strptime(date, "%Y:%m:%d %H:%M:%S")
             return date_obj.strftime("%Y/%m/%d %H:%M:%S")
         except:
-            return DEFAULT_VALUE
+            return cls.DEFAULT_VALUE
 
     @staticmethod
-    def _divide_f_number(f_number):
+    def _divide_numbers(numbers):
         try:
-            a, b = f_number.split('/')
-            return int(a) / int(b)
-        except:
-            return f_number
+            if isinstance(numbers, str):
+                a, b = numbers.split('/')
+                return int(a) / int(b)
+            elif isinstance(numbers, tuple):
+                result = numbers[0] / numbers[1]
+                return int(result) if result == int(result) else result
+        except Exception:
+            return numbers
 
+
+def _decode_piexif_value(value):
+    if isinstance(value, bytes):
+        try:
+            return value.decode("utf-8")
+        except UnicodeDecodeError:
+            try:
+                return value.decode("latin-1")  # fallback
+            except UnicodeDecodeError:
+                return value
+    return value
 
 def get_exif_data(image_path):
-    raw_data = dict()
+    metadata = {}
 
     try:
-        with (open(image_path, 'rb') as image_file):
-            tags = exifread.process_file(image_file)
-            for tag_name, tag_value in tags.items():
-                if tag_name not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename'):
-                    if isinstance(tag_value, exifread.classes.IfdTag):
-                        raw_data[tag_name] = tag_value.printable
-    except Exception as error:
-        pass
+        with Image.open(image_path) as img:
+            metadata['format'] = img.format
+            metadata['mode'] = img.mode
+            metadata['size'] = img.size
 
-    return MetadataDTO(raw_data)
+            try:
+                exif_dict = piexif.load(img.info.get("exif", b""))
+                for ifd in exif_dict:
+                    for tag_id, value in exif_dict[ifd].items():
+                        value = _decode_piexif_value(value)
+                        try:
+                            tag_name = piexif.TAGS[ifd][tag_id]["name"]
+                        except KeyError:
+                            tag_name = tag_id
+                        metadata[f"EXIF_{tag_name}"] = value
+            except Exception:
+                pass
+
+    except Exception as e:
+        print(f"Error Metadata: {e}")
+
+    return MetadataDTO(metadata)
 
 def get_projects():
     try:
