@@ -29,12 +29,12 @@ export class Slideshow {
      */
     slidesTotal = 0;
 
-	/**  
+	/**
 	 * Flag to indicate if an animation is running.
 	 * @type {boolean}
 	 */
 	isAnimating = false;
-	
+
 	/**
      * Slideshow constructor.
      * Initializes the slideshow and sets up the DOM elements.
@@ -45,7 +45,7 @@ export class Slideshow {
 		this.DOM.el = DOM_el;
 		this.DOM.slides = [...this.DOM.el.querySelectorAll('.slide')];
 		this.DOM.slidesInner = this.DOM.slides.map(item => item.querySelector('.slide__img'));
-		
+
 		// Count total slides
 		this.slidesTotal = this.DOM.slides.length;
 
@@ -82,11 +82,11 @@ export class Slideshow {
 		this.isAnimating = true;
 
 		// Check if slideshow is empty
-		if ( this.slidesTotal < 1 ) return false;
+		if ( this.slidesTotal < 2 ) return false;
 
 		// Update the current slide index based on direction
 		const previous = this.current;
-		this.current = direction === 1 ? 
+		this.current = direction === 1 ?
 						this.current < this.slidesTotal - 1 ? ++this.current : 0 :
 						this.current > 0 ? --this.current : this.slidesTotal - 1
 
@@ -95,7 +95,7 @@ export class Slideshow {
 		const currentInner = this.DOM.slidesInner[previous];
 		const upcomingSlide = this.DOM.slides[this.current];
 		const upcomingInner = this.DOM.slidesInner[this.current];
-		
+
 		// Animation sequence using GSAP
 		gsap
 		.timeline({
