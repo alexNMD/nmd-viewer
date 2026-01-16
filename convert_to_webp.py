@@ -2,7 +2,7 @@ import os
 from PIL import Image
 import piexif
 
-import nmd_viewer.config as config
+import nmdviewer.config as config
 
 PROJECTS_PATH = config.PROJECTS_PATH
 

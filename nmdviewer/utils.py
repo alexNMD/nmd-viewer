@@ -5,7 +5,7 @@ from datetime import datetime
 from PIL import Image
 import piexif
 
-from nmd_viewer import config
+from nmdviewer import config
 
 from fractions import Fraction
 

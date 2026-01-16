@@ -1,11 +1,15 @@
-# syntax=docker/dockerfile:1
+FROM python:3.11-slim
 
-FROM python:3.11
+RUN pip install --no-cache-dir "uv[rust]==0.7.19"
 
-WORKDIR /app
+WORKDIR /nmdviewer
+
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+
+COPY pyproject.toml uv.lock ./
+
+RUN uv sync --frozen
 
 COPY . .
 
-RUN pip install --upgrade pip && pip install .
-
-CMD ["gunicorn", "-w 4", "-b 0.0.0.0:8080", "nmd_viewer:app"]
+CMD ["gunicorn", "nmdviewer:app"]

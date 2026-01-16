@@ -1,12 +1,15 @@
 services:
-  nmd_viewer:
-    image: ghcr.io/alexnmd/nmd_viewer:latest
+  nmdviewer:
+    image: nmdviewer
     ports:
-      - "8080:8080"
+      - "8080:8000"
     environment:
-      - CV_FILENAME=CV_Alexandre_Normand_2025.pdf
+      NMDNS: "https://www.alex-nmd.net"
+      CV_FILENAME: CV_Alexandre_Normand_2025.pdf
+      INSTAGRAM_URL: "https://www.instagram.com/alexxnmd/"
+      GITHUB_URL: "https://github.com/alexNMD"
     volumes:
-      - /media/Armoire/projects_viewer:/app/nmd_project
+      - /mnt/Armoire/projects_viewer:/app/nmd_project
       - ./documents:/app/documents
-    container_name: nmd_viewer
+    container_name: nmdviewer
     restart: unless-stopped

@@ -2,8 +2,8 @@ from datetime import datetime
 
 from flask import render_template, redirect, send_from_directory, make_response, Blueprint
 
-from nmd_viewer import config
-from nmd_viewer import utils
+from nmdviewer import config
+from nmdviewer import utils
 
 bp = Blueprint("main", __name__)
 
