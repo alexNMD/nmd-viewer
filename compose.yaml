@@ -1,6 +1,6 @@
 services:
   nmdviewer:
-    image: nmdviewer
+    image: ghcr.io/alexnmd/nmd_viewer:latest
     ports:
       - "8080:8000"
     environment:
