@@ -6,8 +6,8 @@ services:
     environment:
       NMDNS: "https://www.alex-nmd.net"
       CV_FILENAME: CV_Alexandre_Normand_2025.pdf
-      INSTAGRAM_URL: "https://www.instagram.com/alexxnmd/"
-      GITHUB_URL: "https://github.com/alexNMD"
+      INSTAGRAM_PROFILE: "https://www.instagram.com/alexxnmd/"
+      GITHUB_PROFILE: "https://github.com/alexNMD"
     volumes:
       - /mnt/Armoire/projects_viewer:/app/nmd_project
       - ./documents:/app/documents
