@@ -32,8 +32,12 @@
 					</a>
 				</div>
 				<div class="frame__links">
-					<a href="{{ config.GITHUB_URL }}" target="_blank">Github</a>
-					<a href="{{ url_for('main.serve_project_document', document=config.CV_FILENAME) }}" target="_blank">Curriculum Vitae</a>
+                    {% if config.GITHUB_URL %}
+                        <a href="{{ config.GITHUB_URL }}" target="_blank">Github</a>
+                    {% endif %}
+					{% if config.CV_FILENAME %}
+                        <a href="{{ url_for('main.serve_project_document', document=config.CV_FILENAME) }}" target="_blank">Curriculum Vitae</a>
+                    {% endif %}
 				</div>
 				<nav class="frame__demos">
 					<span>Projects</span>
