@@ -112,9 +112,19 @@ def get_exif_data(image_path):
 
 def get_projects():
     try:
-        return [p.lower() for p in os.listdir(config.PROJECTS_PATH)]
+        return [
+            p.lower() for p in os.listdir(config.PROJECTS_PATH) if os.path.isdir(os.path.join(config.PROJECTS_PATH, p))
+        ]
     except FileNotFoundError:
         return []
+
+def is_valid_image(image_path):
+    try:
+        with Image.open(image_path) as img:
+            img.verify()
+            return True
+    except (IOError, SyntaxError):
+        return False
 
 def get_images_metadata(project_selected):
     _project_path = os.path.join(config.PROJECTS_PATH, project_selected) if project_selected else config.PROJECTS_PATH
@@ -127,10 +137,10 @@ def get_images_metadata(project_selected):
 
     return [
         dict(
-            name=f"{i}",
-            mobile_align=f"{re.search(_rgx, i).group(1)}%" if re.search(_rgx, i) else None,
-            metadata=get_exif_data(f'{_project_path}/{i}')
-        ) for i in images_lst
+            name=image,
+            mobile_align=f"{re.search(_rgx, image).group(1)}%" if re.search(_rgx, image) else None,
+            metadata=get_exif_data(f'{_project_path}/{image}')
+        ) for image in [i for i in images_lst if is_valid_image(os.path.join(config.PROJECTS_PATH, project_selected, i))]
     ]
 
 def get_template_context():
