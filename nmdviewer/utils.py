@@ -140,7 +140,7 @@ def get_images_metadata(project_selected):
             name=image,
             mobile_align=f"{re.search(_rgx, image).group(1)}%" if re.search(_rgx, image) else None,
             metadata=get_exif_data(f'{_project_path}/{image}')
-        ) for image in [i for i in images_lst if is_valid_image(os.path.join(config.PROJECTS_PATH, project_selected, i))]
+        ) for image in [i for i in images_lst if is_valid_image(image_path=f'{_project_path}/{i}')]
     ]
 
 def get_template_context():
