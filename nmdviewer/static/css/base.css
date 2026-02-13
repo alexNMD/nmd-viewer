@@ -286,6 +286,12 @@ a.frame__demo--current {
 }
 
 @media screen and (max-width: 53em) {
+	:root {
+		font-size: 12px;
+	}
+	.metadata {
+		font-size: 10px !important;
+	}
     .slides-nav .navigate::before {
         content: 'drag';
         margin-right: 2rem;
@@ -315,8 +321,8 @@ a.frame__demo--current {
 
 
 @media screen and (min-width: 53em) {
-	.frame { 
-		height: 100vh; 
+	.frame {
+		height: 100vh;
 		grid-gap: 2rem;
 		align-content: space-between;
 		grid-template-columns: auto auto auto 1fr;
