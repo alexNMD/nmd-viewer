@@ -14,5 +14,14 @@ Observer.create({
     tolerance: 10
 });
 
+// handle keyboard
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        slideshow.prev();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        slideshow.next();
+    }
+});
+
 // Preload all images. Once all images are preloaded, remove the 'loading' class from the body.
 preloadImages('.slide__img').then(() => document.body.classList.remove('loading'));
