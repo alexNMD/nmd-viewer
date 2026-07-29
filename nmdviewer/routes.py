@@ -1,15 +1,14 @@
 from datetime import datetime
 
 from flask import (
-    render_template,
-    redirect,
-    send_from_directory,
-    make_response,
     Blueprint,
+    make_response,
+    redirect,
+    render_template,
+    send_from_directory,
 )
 
-from nmdviewer import config
-from nmdviewer import utils
+from nmdviewer import config, utils
 
 bp = Blueprint("main", __name__)
 

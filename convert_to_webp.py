@@ -1,10 +1,10 @@
 import os
-from PIL import Image
+
 import piexif
 from loguru import logger
+from PIL import Image
 
 import nmdviewer.config as config
-
 
 PROJECTS_PATH = config.PROJECTS_PATH
 
@@ -23,7 +23,7 @@ for project in projects_lst:
                 image_name_without_ext = os.path.splitext(i)[0]
                 webp_path = f"{PROJECTS_PATH}/{project}/{image_name_without_ext}.webp"
 
-                # Extraction des métadonnées (EXIF uniquement, pour les formats pris en charge comme JPEG)
+                # Extraction des métadonnées
                 exif_data = image.info.get("exif")
 
                 # Sauvegarde de l'image au format WebP
@@ -33,7 +33,7 @@ for project in projects_lst:
                 if exif_data:
                     piexif.insert(exif_data, webp_path)
 
-            except Exception as error:
+            except Exception:
                 logger.error(f"Unable to perform {image_path}")
 
             print(f"{image_path} done")

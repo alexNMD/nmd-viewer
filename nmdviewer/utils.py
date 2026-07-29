@@ -1,13 +1,12 @@
-import re
 import os
+import re
 from datetime import datetime
+from fractions import Fraction
 
-from PIL import Image
 import piexif
+from PIL import Image
 
 from nmdviewer import config
-
-from fractions import Fraction
 
 
 class MetadataDTO:
@@ -36,15 +35,11 @@ class MetadataDTO:
     def get_exposure_time(cls, value):
         if isinstance(value, tuple) and len(value) == 2:
             exposure = cls._divide_numbers(value)
-        elif isinstance(value, Fraction):
-            exposure = float(value)
-        elif isinstance(value, (int, float)):
+        elif isinstance(value, (int, float, Fraction)):
             exposure = float(value)
         else:
             try:
-                exposure = float(
-                    Fraction(value.decode() if isinstance(value, bytes) else value)
-                )
+                exposure = float(Fraction(value.decode() if isinstance(value, bytes) else value))
             except Exception:
                 return str(value)
 
@@ -58,7 +53,7 @@ class MetadataDTO:
         try:
             date_obj = datetime.strptime(date, "%Y:%m:%d %H:%M:%S")
             return date_obj.strftime("%Y/%m/%d %H:%M:%S")
-        except:
+        except Exception:
             return cls.DEFAULT_VALUE
 
     @staticmethod
@@ -130,7 +125,7 @@ def is_valid_image(image_path):
         with Image.open(image_path) as img:
             img.verify()
             return True
-    except (IOError, SyntaxError):
+    except (OSError, SyntaxError):
         return False
 
 
@@ -150,14 +145,10 @@ def get_images_metadata(project_selected):
     return [
         dict(
             name=image,
-            mobile_align=f"{re.search(_rgx, image).group(1)}%"
-            if re.search(_rgx, image)
-            else None,
+            mobile_align=f"{re.search(_rgx, image).group(1)}%" if re.search(_rgx, image) else None,
             metadata=get_exif_data(f"{_project_path}/{image}"),
         )
-        for image in [
-            i for i in images_lst if is_valid_image(image_path=f"{_project_path}/{i}")
-        ]
+        for image in [i for i in images_lst if is_valid_image(image_path=f"{_project_path}/{i}")]
     ]
 
 
