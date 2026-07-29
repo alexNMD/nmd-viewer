@@ -1,11 +1,18 @@
 from datetime import datetime
 
-from flask import render_template, redirect, send_from_directory, make_response, Blueprint
+from flask import (
+    render_template,
+    redirect,
+    send_from_directory,
+    make_response,
+    Blueprint,
+)
 
 from nmdviewer import config
 from nmdviewer import utils
 
 bp = Blueprint("main", __name__)
+
 
 @bp.route("/about")
 def about():
@@ -13,8 +20,9 @@ def about():
         "index.html",
         project_selected="about",
         images_availables=[],
-        **utils.get_template_context()
+        **utils.get_template_context(),
     )
+
 
 @bp.route("/")
 @bp.route("/<string:project>")
@@ -26,33 +34,35 @@ def home(project=None):
         "index.html",
         project_selected=project_selected,
         images_availables=utils.get_images_metadata(project_selected=project_selected),
-        **utils.get_template_context()
+        **utils.get_template_context(),
     )
 
 
-@bp.route('/images/<path:project>/<path:image>')
+@bp.route("/images/<path:project>/<path:image>")
 def serve_project_image(project, image):
-    return send_from_directory(f'{config.PROJECTS_PATH}/{project}', image), 200
+    return send_from_directory(f"{config.PROJECTS_PATH}/{project}", image), 200
 
 
-@bp.route('/documents/<string:document>')
+@bp.route("/documents/<string:document>")
 def serve_project_document(document):
     return send_from_directory(config.DOCUMENTS_PATH, document), 200
 
 
-@bp.route('/sitemap.xml')
+@bp.route("/sitemap.xml")
 def sitemap():
-    xml_template = render_template("sitemap.xml",
-                                   dns=config.DNS,
-                                   lastmod=f"{datetime.today().strftime('%Y')}-01-01",
-                                   **utils.get_template_context())
+    xml_template = render_template(
+        "sitemap.xml",
+        dns=config.DNS,
+        lastmod=f"{datetime.today().strftime('%Y')}-01-01",
+        **utils.get_template_context(),
+    )
 
     response = make_response(xml_template)
-    response.headers['Content-Type'] = 'current_application/xml; charset=utf-8'
+    response.headers["Content-Type"] = "current_application/xml; charset=utf-8"
 
     return response
 
 
 @bp.errorhandler(404)
 def page_not_found(error):
-    return redirect('/'), 302
+    return redirect("/"), 302
